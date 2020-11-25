@@ -1,32 +1,27 @@
 import React from 'react';
 import firebase from 'firebase/app';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
-
-// import fbConnection from '../helpers/data/connection';
+import { BrowserRouter as Router } from 'react-router-dom';
+import fbConnection from '../helpers/data/connection';
 import MyNavbar from '../components/MyNavbar';
-import Home from '../components/Views/Home';
-import Boards from '../components/Views/Boards';
-import BoardForm from '../components/Views/BoardForm';
-import PinDetails from '../components/Views/PinDetails';
-import PinForm from '../components/Views/PinForm';
-import Pins from '../components/Views/Pins';
-import SingleBoard from '../components/Views/SingleBoard';
+import Routes from '../helpers/Routes';
+
+// import { patchFBBoardkeys, patchFBPinkeys } from '../helpers/data/patchFBkeys';
+
+// patchFBBoardkeys();
+// patchFBPinkeys();
+fbConnection();
 
 class App extends React.Component {
   state = {
-    authed: false,
-  }
+    user: null,
+  };
 
   componentDidMount() {
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ authed: true });
+        this.setState({ user });
       } else {
-        this.setState({ authed: false });
+        this.setState({ user: false });
       }
     });
   }
@@ -36,24 +31,16 @@ class App extends React.Component {
   }
 
   render() {
-    const { authed } = this.state;
+    const { user } = this.state;
     return (
-      <div className="App">
-        <MyNavbar authed={authed} />
+      <div className='App'>
         <Router>
-          <Switch>
-            <Route exact path='/' component={() => <Home authed={authed} />} />
-            <Route exact path='/boards' component={() => <Boards />} />
-            <Route exact path='/boardForm' component={() => <BoardForm />} />
-            <Route exact path='/pinDetails' component={() => <PinDetails />} />
-            <Route exact path='/pinForm' component={() => <PinForm />} />
-            <Route exact path='/pins' component={() => <Pins />} />
-            <Route exact path='/singleBoard' component={() => <SingleBoard />} />
-            <Route component={() => <Home authed={authed} />} />
-          </Switch>
+          <MyNavbar user={user}/>
+          <Routes user={user} />
         </Router>
       </div>
     );
   }
 }
+
 export default App;

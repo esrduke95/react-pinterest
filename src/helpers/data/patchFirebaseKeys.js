@@ -1,24 +1,28 @@
 import axios from 'axios';
-import ApiKeys from './apiKeys';
 
-const baseUrl = ApiKeys.databaseURL;
+const baseUrl = 'https://fir-cows-958ae.firebaseio.com/pinterest-webpack';
 
-const patchPinsFromFirebase = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Pins.json`).then((response) => {
+const patchFBBoardkeys = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/boards.json`).then((response) => {
+    // console.warn(Object.keys(response.data));
     const keys = Object.keys(response.data);
-    keys.forEach((item) => {
-      axios.patch(`${baseUrl}/Pins/${item}.json`, { firebaseKey: item });
+    keys.forEach((key) => {
+      axios.patch(`${baseUrl}/boards/${key}.json`, { firebaseKey: key });
     });
   }).catch((error) => reject(error));
 });
 
-const patchBoardsFromFirebase = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Boards.json`).then((response) => {
+const patchFBPinkeys = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/pins.json`).then((response) => {
+    // console.warn(Object.keys(response.data));
     const keys = Object.keys(response.data);
-    keys.forEach((item) => {
-      axios.patch(`${baseUrl}/Boards/${item}.json`, { firebaseKey: item });
+    keys.forEach((key) => {
+      axios.patch(`${baseUrl}/pins/${key}.json`, { firebaseKey: key });
     });
   }).catch((error) => reject(error));
 });
 
-export { patchPinsFromFirebase, patchBoardsFromFirebase };
+export {
+  patchFBBoardkeys,
+  patchFBPinkeys,
+};

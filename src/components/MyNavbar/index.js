@@ -14,7 +14,6 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import SearchInput from '../SearchInput/SearchInput';
-import userData from '../../helpers/data/userData';
 
 export default function MyNavbar(props) {
   const logMeOut = (e) => {
@@ -22,9 +21,6 @@ export default function MyNavbar(props) {
     firebase.auth().signOut();
   };
   const { user } = props;
-  if (user) {
-    userData.setCurrentUser(user);
-  }
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
@@ -44,10 +40,12 @@ export default function MyNavbar(props) {
             </NavItem>
           </Nav>
           <SearchInput {...props} />
+          {/* "Optional chaining operator: (?.)" gives the prop time to load without throwing errors. Only use this if you know your props are correct and need time to load.
+          https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining */}
           {
             user
             && <>
-              {/* <img className="userInfo" src={user?.photoURL} alt={user?.displayName} /> */}
+              <img className="userInfo" src={user?.photoURL} alt={user?.displayName} />
               <UncontrolledDropdown>
               <DropdownToggle nav caret>
               </DropdownToggle>

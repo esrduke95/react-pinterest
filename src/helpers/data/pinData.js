@@ -1,28 +1,17 @@
 import axios from 'axios';
-import ApiKeys from './apiKeys';
 
-const baseUrl = ApiKeys.databaseURL;
+const baseUrl = 'https://fir-cows-958ae.firebaseio.com/pinterest-webpack';
 
-const getAllPins = () => new Promise((resolve, reject) => {
-  axios
-    .get(`${baseUrl}/Pins.json`)
-    .then((response) => {
-      const Pins = response.data;
-      const PinsArray = [];
-      if (Pins) {
-        Object.keys(Pins).forEach((boardId) => {
-          PinsArray.push(Pins[boardId]);
-        });
-      }
-      resolve(PinsArray);
-    })
-    .catch((error) => reject(error));
+const getBoardPins = (boardId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/pins-boards.json?orderBy="boardId"&equalTo="${boardId}"`).then((response) => {
+    resolve(Object.values(response.data));
+  }).catch((error) => reject(error));
 });
 
-const getSinglePin = (pinId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Pins/${pinId}.json`).then((response) => {
+const getPin = (pinId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/pins/${pinId}.json`).then((response) => {
     resolve(response.data);
   }).catch((error) => reject(error));
 });
 
-export default { getSinglePin, getAllPins };
+export { getBoardPins, getPin };
