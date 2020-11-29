@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const baseUrl = 'https://fir-cows-958ae.firebaseio.com/pinterest-webpack';
+const baseUrl = 'https://finterest-3004c.firebaseio.com/';
 
-const getAllUserBoards = (uid) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/boards.json?orderBy="userId"&equalTo="${uid}"`).then((response) => {
+const getAllUserBoards = (userUid) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/boards.json?orderBy="userId"&equalTo="${userUid}"`).then((response) => {
     resolve(Object.values(response.data));
   }).catch((error) => reject(error));
 });
